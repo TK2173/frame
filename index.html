@@ -1,341 +1,360 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#090a0c">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0b">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="FRAME Studio">
 <title>FRAME Studio</title>
+
+<!-- Официальный SDK Telegram Mini Apps -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
-:root {
-  color-scheme: dark;
-  --bg:#090a0c;
-  --panel:#131519;
-  --line:#2b2d32;
-  --gold:#d8bd88;
-  --text:#f5f2ec;
-  --muted:#a1a3aa;
+:root{
+  color-scheme:dark;
+  --bg:#0a0a0b;--panel:#141416;--panel2:#1b1b1e;
+  --line:#303034;--gold:#d8bd88;--gold2:#f0dfb9;
+  --text:#f6f3ed;--muted:#a3a0a0;
 }
-* { box-sizing:border-box }
-body {
-  margin:0;
-  background:radial-gradient(ellipse at top,#28251f 0,transparent 42%),var(--bg);
-  color:var(--text);
-  font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-header {
-  padding:20px;
-  border-bottom:1px solid var(--line);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.4;cursor:not-allowed}
+.app{max-width:1000px;margin:auto;padding:0 16px 36px}
+header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:20px 0;border-bottom:1px solid var(--line);gap:12px
 }
-.logo { font-size:20px;font-weight:800;letter-spacing:.18em }
-.logo span { color:var(--gold) }
-.label { color:var(--muted);font-size:10px;letter-spacing:.12em }
-main { max-width:1100px;margin:auto;padding:24px 16px 48px }
-h1 { font-size:clamp(30px,6vw,44px);letter-spacing:-.04em;margin:0 0 8px }
-.intro { color:var(--muted);line-height:1.6;margin-bottom:24px }
-.layout { display:grid;grid-template-columns:1.2fr .8fr;gap:16px }
-.panel { min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:18px }
-h2 { color:var(--gold);font-size:12px;letter-spacing:.14em;margin:0 0 17px }
-.drop {
-  display:block;text-align:center;padding:24px 12px;
-  border:1px dashed #665b48;border-radius:12px;cursor:pointer;
-  background:#0c0e11;line-height:1.7
+.logo{font-size:19px;font-weight:800;letter-spacing:.17em}
+.logo span{color:var(--gold)}
+.pill{font-size:10px;color:var(--gold);border:1px solid #6c5c3e;padding:7px 10px;border-radius:30px;letter-spacing:.1em}
+.hero{padding:27px 0 22px}
+.eyebrow{color:var(--gold);font-size:10px;letter-spacing:.2em}
+h1{font-size:clamp(34px,8vw,58px);letter-spacing:-.055em;line-height:1.02;margin:12px 0}
+.hero p{color:var(--muted);line-height:1.6;font-size:14px;max-width:480px}
+.tabs{display:flex;gap:8px;margin:22px 0}
+.tab{flex:1;padding:12px 8px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--muted);font-size:13px}
+.tab.active{background:var(--gold);color:#16130e;border-color:var(--gold);font-weight:700}
+.page{display:none}.page.active{display:block}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:17px;margin-bottom:14px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}
+.panel-head h2{font-size:12px;letter-spacing:.15em;color:var(--gold);margin:0}
+.subtle{color:var(--muted);font-size:11px}
+.upload{
+  display:block;padding:25px 12px;text-align:center;
+  background:#0e0e10;border:1px dashed #655942;border-radius:12px;
+  cursor:pointer;line-height:1.8
 }
-.drop strong { display:block }
-.drop small { color:var(--muted) }
-input[type=file] { display:none }
-.preview {
-  margin-top:14px;min-height:170px;background:#050607;
-  border-radius:12px;overflow:hidden;display:flex;
-  justify-content:center;align-items:center
+.upload strong{display:block}.upload small{color:var(--muted)}
+input[type=file]{display:none}
+.preview{margin-top:13px;min-height:190px;background:#050506;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.preview video{display:block;width:100%;max-height:42vh;object-fit:contain}
+.placeholder{text-align:center;color:#777;padding:25px;font-size:13px}
+.meta{font-size:11px;color:var(--muted);line-height:1.6;margin-top:10px;overflow-wrap:anywhere}
+.btn{border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--text);padding:13px 12px;font-size:13px;font-weight:650}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#17130c}
+.btn.full{width:100%}
+.btn-row{display:flex;gap:9px;margin-top:12px}
+.btn-row>*{flex:1;min-width:0}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:20px 18px}
+.control label{display:flex;justify-content:space-between;gap:8px;font-size:12px;margin-bottom:10px}
+output{color:var(--gold)}
+input[type=range]{width:100%;accent-color:var(--gold)}
+select{width:100%;padding:12px;background:#0e0e10;color:var(--text);border:1px solid var(--line);border-radius:9px}
+.field{margin-top:18px}
+.field label{display:block;font-size:12px;margin-bottom:9px}
+.status{font-size:12px;line-height:1.6;margin-top:12px;overflow-wrap:anywhere;color:var(--muted)}
+.status.error{color:#ffaaaa}.status.ok{color:#c9e6c3}
+.section-title{font-size:12px;color:var(--gold);letter-spacing:.15em;margin:24px 0 13px}
+.pro-card{
+  border:1px solid #75613e;border-radius:17px;padding:22px;
+  background:radial-gradient(ellipse at top right,#3a3020 0,transparent 60%),#151413;
 }
-video { width:100%;max-height:48vh;object-fit:contain }
-.placeholder { padding:35px 10px;color:#777;text-align:center }
-.meta,.note { font-size:12px;line-height:1.6;color:var(--muted);margin-top:12px;overflow-wrap:anywhere }
-.controls { display:grid;gap:21px }
-.control label { display:flex;justify-content:space-between;gap:10px;margin-bottom:9px;font-size:13px }
-output { color:var(--gold) }
-input[type=range] { width:100%;accent-color:var(--gold) }
-select {
-  width:100%;padding:12px;background:#0c0e11;color:white;
-  border:1px solid var(--line);border-radius:10px
-}
-.actions { display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:17px }
-button,.download {
-  padding:13px 10px;border:1px solid #514838;border-radius:10px;
-  background:#202125;color:var(--text);font-size:13px;
-  font-weight:650;text-align:center;text-decoration:none;cursor:pointer
-}
-.primary { background:var(--gold);color:#17130d;border-color:var(--gold) }
-button:disabled { opacity:.4;cursor:not-allowed }
-.status { margin-top:14px;font-size:13px;line-height:1.6;overflow-wrap:anywhere }
-.status:empty { display:none }
-.status.error { color:#ffbaba }
-.status.ok { color:#c5e6bd }
-.section-gap { margin-top:27px }
-footer { text-align:center;color:#6f7279;font-size:10px;letter-spacing:.12em;margin-top:25px }
-@media(max-width:740px) {
-  .layout { grid-template-columns:1fr }
-  header { padding:16px }
-  .panel { padding:15px }
-  video { max-height:40vh }
-}
+.pro-card h2{font-size:28px;letter-spacing:-.04em;margin:10px 0}
+.pro-card p{font-size:13px;line-height:1.6;color:#c5c0b7}
+.feature{padding:12px 0;border-bottom:1px solid #38332a;font-size:13px}
+.feature:last-of-type{border:0}
+.star{color:var(--gold2)}
+.price-note{color:var(--muted);font-size:11px;line-height:1.6;margin-top:12px}
+.notice{border:1px solid var(--line);padding:12px;border-radius:10px;color:var(--muted);font-size:12px;line-height:1.6;margin-top:14px}
+footer{text-align:center;color:#666;font-size:10px;letter-spacing:.12em;padding:24px 0}
+@media(max-width:430px){.controls{grid-template-columns:1fr}.panel{padding:14px}.hero{padding-top:22px}}
 </style>
 </head>
 <body>
+<div class="app">
 <header>
   <div class="logo">FRAME <span>STUDIO</span></div>
-  <div class="label">PRIVATE VIDEO WORKSPACE</div>
+  <div class="pill" id="accountBadge">VIDEO WORKSPACE</div>
 </header>
 
-<main>
-  <h1>Твоя картинка.<br>Твои настройки.</h1>
-  <p class="intro">Коррекция видео и экспорт прямо в браузере. Исходное видео не загружается на сервер.</p>
+<section class="hero">
+  <div class="eyebrow">YOUR CREATIVE SPACE</div>
+  <h1>Make every<br>frame matter.</h1>
+  <p>Твоя картинка. Твои настройки. Работай с видео прямо в Mini App.</p>
+</section>
 
-  <div class="layout">
-    <section class="panel">
-      <h2>01 / ВИДЕО</h2>
+<nav class="tabs">
+  <button class="tab active" data-page="editor">Редактор</button>
+  <button class="tab" data-page="pro">FRAME PRO <span class="star">✦</span></button>
+</nav>
 
-      <label class="drop" for="file">
-        <strong>Выбрать видео</strong>
-        <small>Открой «Фото» или «Файлы» на iPad</small>
-        <input id="file" type="file" accept="video/*">
-      </label>
+<section class="page active" id="editor">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>01 / SOURCE</h2>
+      <span class="subtle">LOCAL VIDEO</span>
+    </div>
 
-      <div class="preview" id="preview">
-        <div class="placeholder">Предпросмотр появится здесь</div>
-      </div>
-      <div class="meta" id="info">Файл не выбран</div>
+    <label class="upload" for="file">
+      <strong>＋ Выбрать видео</strong>
+      <small>Открой видео из «Фото» или «Файлов»</small>
+      <input id="file" type="file" accept="video/*">
+    </label>
 
-      <div class="actions">
-        <button id="reset" disabled>Сбросить</button>
-        <button id="play" disabled>Воспроизвести</button>
-      </div>
-
-      <h2 class="section-gap">02 / ЭКСПОРТ</h2>
-      <div class="control">
-        <label for="scale">Размер кадра</label>
-        <select id="scale">
-          <option value="1">Исходное разрешение</option>
-          <option value="0.75">75% от исходного</option>
-          <option value="0.5">50% от исходного</option>
-        </select>
-      </div>
-
-      <div class="actions">
-        <button class="primary" id="export" disabled>Обработать видео</button>
-        <a id="download" class="download" hidden>Скачать результат</a>
-      </div>
-
-      <div id="status" class="status" role="status" aria-live="polite"></div>
-      <p class="note">Экспорт происходит в реальном времени. Не закрывай страницу. Поддержка звука и формата файла зависит от версии Safari.</p>
-    </section>
-
-    <section class="panel">
-      <h2>03 / КОРРЕКЦИЯ</h2>
-      <div class="controls">
-        <div class="control">
-          <label for="brightness">Яркость <output id="brightnessOut">100%</output></label>
-          <input id="brightness" type="range" min="50" max="150" value="100">
-        </div>
-        <div class="control">
-          <label for="contrast">Контрастность <output id="contrastOut">100%</output></label>
-          <input id="contrast" type="range" min="50" max="160" value="100">
-        </div>
-        <div class="control">
-          <label for="saturation">Насыщенность <output id="saturationOut">100%</output></label>
-          <input id="saturation" type="range" min="0" max="200" value="100">
-        </div>
-        <div class="control">
-          <label for="sharpness">Резкость <output id="sharpnessOut">0</output></label>
-          <input id="sharpness" type="range" min="0" max="2" step="0.1" value="0">
-        </div>
-      </div>
-
-      <h2 class="section-gap">04 / AI-УЛУЧШЕНИЕ</h2>
-      <p class="note">AI-модель ещё не подключена. Настройки выше выполняют обычную коррекцию и повышение резкости, но не восстанавливают детали с помощью искусственного интеллекта. Для AI потребуется отдельная модель.</p>
-      <p class="note">Совет: сначала попробуй короткий ролик. Некоторые устройства могут не справиться с экспортом больших файлов.</p>
-    </section>
+    <div class="preview" id="preview">
+      <div class="placeholder">Твой ролик появится здесь</div>
+    </div>
+    <div class="meta" id="fileInfo">Видео не выбрано</div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
   </div>
 
-  <footer>FRAME STUDIO · LOCAL BROWSER PROCESSING</footer>
-</main>
+  <div class="panel">
+    <div class="panel-head">
+      <h2>02 / IMAGE CONTROL</h2>
+      <span class="subtle">LIVE PREVIEW</span>
+    </div>
+    <div class="controls">
+      <div class="control">
+        <label for="brightness">Яркость <output id="brightnessOut">100%</output></label>
+        <input id="brightness" type="range" min="50" max="150" value="100">
+      </div>
+      <div class="control">
+        <label for="contrast">Контраст <output id="contrastOut">100%</output></label>
+        <input id="contrast" type="range" min="50" max="160" value="100">
+      </div>
+      <div class="control">
+        <label for="saturation">Цвет <output id="saturationOut">100%</output></label>
+        <input id="saturation" type="range" min="0" max="200" value="100">
+      </div>
+      <div class="control">
+        <label for="sharpness">Резкость <output id="sharpnessOut">0</output></label>
+        <input id="sharpness" type="range" min="0" max="2" step=".1" value="0">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="resolution">Разрешение экспорта</label>
+      <select id="resolution">
+        <option value="1">Исходное разрешение</option>
+        <option value=".75">75% от исходного</option>
+        <option value=".5">50% от исходного</option>
+      </select>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="reset" disabled>Сбросить</button>
+      <button class="btn gold" id="export" disabled>Экспорт видео</button>
+    </div>
+    <a class="btn gold full" id="download" hidden style="display:block;margin-top:10px;text-decoration:none;text-align:center">Скачать видео</a>
+    <p class="price-note">Экспорт выполняется в реальном времени. В зависимости от Safari звук может не сохраниться, а поддерживаемый формат может отличаться.</p>
+  </div>
+
+  <div class="notice">AI-модель пока не подключена. Ползунок резкости не является AI-восстановлением. Эта версия выполняет обычную коррекцию изображения.</div>
+</section>
+
+<section class="page" id="pro">
+  <div class="pro-card">
+    <div class="eyebrow">UNLOCK YOUR WORKFLOW</div>
+    <h2>FRAME PRO <span class="star">✦</span></h2>
+    <p>Расширенные инструменты для твоего видео — по подписке.</p>
+    <div class="feature">✦ Расширенные настройки обработки</div>
+    <div class="feature">✦ Дополнительные возможности экспорта</div>
+    <div class="feature">✦ AI-инструменты после подключения модели</div>
+
+    <div class="field">
+      <label for="plan">Выбери срок подписки</label>
+      <select id="plan">
+        <option value="monthly">1 месяц</option>
+        <option value="annual">12 месяцев</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Способ оплаты</label>
+      <button class="btn full gold" id="starsButton">⭐ Оплата Telegram Stars</button>
+    </div>
+    <div class="status" id="paymentStatus" role="status" aria-live="polite"></div>
+    <div class="price-note">Стоимость и период подписки должны быть настроены в платёжном обработчике бота. Оплата пока не подключена этим HTML-файлом.</div>
+  </div>
+  <div class="notice">Статус PRO должен подтверждаться сервером. Нельзя безопасно активировать платную подписку только изменением кода в браузере.</div>
+</section>
+
+<footer>FRAME STUDIO · BUILT FOR CREATORS</footer>
+</div>
 
 <script>
 (() => {
-  const $ = id => document.getElementById(id);
-  const fileInput = $('file');
-  const preview = $('preview');
-  const info = $('info');
-  const status = $('status');
+  'use strict';
 
-  const ids = ['brightness','contrast','saturation','sharpness'];
+  const $ = id => document.getElementById(id);
+  const tg = window.Telegram && window.Telegram.WebApp;
   let video = null;
-  let sourceURL = null;
-  let resultURL = null;
+  let sourceUrl = null;
+  let outputUrl = null;
   let recorder = null;
   let chunks = [];
   let exporting = false;
-  let raf = 0;
+  let frameId = 0;
 
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d', {willReadFrequently:true});
-
-  function message(text, type='') {
-    status.textContent = text;
-    status.className = 'status ' + type;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+    try { tg.setHeaderColor('#0a0a0b'); } catch (_) {}
+    try { tg.setBackgroundColor('#0a0a0b'); } catch (_) {}
   }
 
-  function filterString() {
-    return `brightness(${$('brightness').value}%) contrast(${$('contrast').value}%) saturate($('saturation').value}%)`;
+  document.querySelectorAll('.tab').forEach(button => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      button.classList.add('active');
+      $(button.dataset.page).classList.add('active');
+    });
+  });
+
+  function say(text, type='') {
+    $('status').textContent = text;
+    $('status').className = 'status ' + type;
   }
 
-  // Build CSS filter without remote resources or external libraries.
-  function getFilter() {
+  function filterCss() {
     return 'brightness(' + $('brightness').value + '%) ' +
       'contrast(' + $('contrast').value + '%) ' +
       'saturate(' + $('saturation').value + '%)';
   }
 
-  function update() {
-    $('brightnessOut').textContent = $('brightness').value + '%';
-    $('contrastOut').textContent = $('contrast').value + '%';
-    $('saturationOut').textContent = $('saturation').value + '%';
+  function updateControls() {
+    ['brightness','contrast','saturation'].forEach(id => {
+      $(id+'Out').textContent = $(id).value + '%';
+    });
     $('sharpnessOut').textContent = $('sharpness').value;
-    if (video) video.style.filter = getFilter();
+    if (video) video.style.filter = filterCss();
   }
 
-  ids.forEach(id => $(id).addEventListener('input', update));
+  ['brightness','contrast','saturation','sharpness'].forEach(id => {
+    $(id).addEventListener('input', updateControls);
+  });
 
   $('reset').addEventListener('click', () => {
     $('brightness').value = 100;
     $('contrast').value = 100;
     $('saturation').value = 100;
     $('sharpness').value = 0;
-    update();
+    updateControls();
   });
 
-  fileInput.addEventListener('change', () => {
-    const file = fileInput.files && fileInput.files[0];
+  $('file').addEventListener('change', () => {
+    const file = $('file').files && $('file').files[0];
     if (!file) return;
 
-    if (sourceURL) URL.revokeObjectURL(sourceURL);
-    if (resultURL) URL.revokeObjectURL(resultURL);
-    resultURL = null;
+    if (sourceUrl) URL.revokeObjectURL(sourceUrl);
+    if (outputUrl) URL.revokeObjectURL(outputUrl);
+    outputUrl = null;
     $('download').hidden = true;
 
-    sourceURL = URL.createObjectURL(file);
+    sourceUrl = URL.createObjectURL(file);
     video = document.createElement('video');
-    video.src = sourceURL;
+    video.src = sourceUrl;
     video.playsInline = true;
     video.preload = 'metadata';
     video.controls = true;
-    video.style.filter = getFilter();
-
-    preview.replaceChildren(video);
-    info.textContent = file.name + ' · ' + (file.size / 1048576).toFixed(1) + ' МБ';
+    video.style.filter = filterCss();
+    $('preview').replaceChildren(video);
+    $('fileInfo').textContent = file.name + ' · ' + (file.size / 1048576).toFixed(1) + ' МБ';
     $('reset').disabled = false;
-    $('play').disabled = false;
     $('export').disabled = true;
-    message('Открываем видео…');
+    say('Открываем видео…');
 
     video.addEventListener('loadedmetadata', () => {
       if (!video.videoWidth || !video.videoHeight) {
-        message('Не удалось прочитать видео. Попробуй MP4 с кодеком H.264.', 'error');
+        say('Не удалось прочитать видео. Попробуй совместимый MP4.', 'error');
         return;
       }
-      info.textContent += ' · ' + video.videoWidth + '×' + video.videoHeight;
+      $('fileInfo').textContent += ' · ' + video.videoWidth + '×' + video.videoHeight;
       $('export').disabled = false;
-      message('Видео готово. Настрой изображение и запусти экспорт.', 'ok');
+      say('Видео готово к коррекции.', 'ok');
     }, {once:true});
 
     video.addEventListener('error', () => {
-      message('Safari не смог открыть файл. Попробуй совместимое видео MP4/H.264.', 'error');
+      say('Не удалось открыть файл. Попробуй MP4 с кодеком H.264.', 'error');
     }, {once:true});
-    update();
+
+    updateControls();
   });
 
-  $('play').addEventListener('click', async () => {
-    if (!video) return;
-    if (video.paused) {
-      try {
-        await video.play();
-        $('play').textContent = 'Пауза';
-      } catch (_) {
-        message('Не удалось воспроизвести видео.', 'error');
-      }
-    } else {
-      video.pause();
-      $('play').textContent = 'Воспроизвести';
-    }
-  });
+  // Простое повышение резкости кадра методом unsharp mask.
+  // Это фильтр изображения, а не AI.
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d', {willReadFrequently:true});
 
-  function sharpenFrame() {
+  function drawFrame() {
+    if (!video || video.readyState < 2) return;
+    ctx.filter = filterCss();
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.filter = 'none';
+
     const amount = Number($('sharpness').value);
-    if (amount <= 0) return;
+    if (!amount) return;
 
     const w = canvas.width, h = canvas.height;
     if (w < 3 || h < 3) return;
-
-    const frame = ctx.getImageData(0, 0, w, h);
-    const src = new Uint8ClampedArray(frame.data);
-    const d = frame.data;
-    const strength = Math.min(.45, amount * .2);
+    const image = ctx.getImageData(0, 0, w, h);
+    const src = new Uint8ClampedArray(image.data);
+    const d = image.data;
+    const strength = Math.min(.4, amount * .18);
 
     for (let y = 1; y < h - 1; y++) {
       for (let x = 1; x < w - 1; x++) {
         const i = (y * w + x) * 4;
         for (let c = 0; c < 3; c++) {
-          const avg = (
-            src[i - 4 + c] + src[i + 4 + c] +
-            src[i - w * 4 + c] + src[i + w * 4 + c]
-          ) / 4;
-          d[i + c] = src[i + c] + (src[i + c] - avg) * strength;
+          const avg = (src[i-4+c] + src[i+4+c] +
+            src[i-w*4+c] + src[i+w*4+c]) / 4;
+          d[i+c] = Math.max(0, Math.min(255,
+            src[i+c] + (src[i+c] - avg) * strength));
         }
       }
     }
-    ctx.putImageData(frame, 0, 0);
-  }
-
-  function drawFrame() {
-    if (!video || video.readyState < 2) return;
-    ctx.filter = getFilter();
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    ctx.filter = 'none';
-    sharpenFrame();
+    ctx.putImageData(image, 0, 0);
   }
 
   function supportedMime() {
     if (!window.MediaRecorder) return '';
-    const candidates = [
+    const types = [
       'video/mp4;codecs=avc1.42E01E',
       'video/mp4',
       'video/webm;codecs=vp8',
       'video/webm'
     ];
-    return candidates.find(type =>
-      MediaRecorder.isTypeSupported &&
-      MediaRecorder.isTypeSupported(type)
-    ) || '';
+    return types.find(t => MediaRecorder.isTypeSupported &&
+      MediaRecorder.isTypeSupported(t)) || '';
   }
 
   $('export').addEventListener('click', async () => {
     if (!video || exporting) return;
-
     if (!canvas.captureStream || !window.MediaRecorder) {
-      message('Эта версия Safari не поддерживает нужный способ экспорта. Обнови iPadOS и попробуй снова.', 'error');
+      say('Эта версия Safari не поддерживает экспорт этим способом. Обнови iPadOS или попробуй другой браузер.', 'error');
       return;
     }
 
     const mime = supportedMime();
     if (!mime) {
-      message('Safari не поддерживает доступный формат записи видео.', 'error');
+      say('Safari не сообщает поддерживаемый формат видеозаписи.', 'error');
       return;
     }
 
@@ -344,7 +363,7 @@ footer { text-align:center;color:#6f7279;font-size:10px;letter-spacing:.12em;mar
     $('download').hidden = true;
 
     try {
-      const factor = Number($('scale').value);
+      const factor = Number($('resolution').value);
       canvas.width = Math.max(2, Math.floor(video.videoWidth * factor / 2) * 2);
       canvas.height = Math.max(2, Math.floor(video.videoHeight * factor / 2) * 2);
 
@@ -352,32 +371,31 @@ footer { text-align:center;color:#6f7279;font-size:10px;letter-spacing:.12em;mar
       chunks = [];
       recorder = new MediaRecorder(stream, {mimeType:mime});
 
-      recorder.ondataavailable = event => {
-        if (event.data && event.data.size) chunks.push(event.data);
+      recorder.ondataavailable = e => {
+        if (e.data && e.data.size) chunks.push(e.data);
       };
 
-      recorder.onerror = () => {
-        message('Ошибка записи. Попробуй короткий ролик и меньшее разрешение.', 'error');
-      };
+      recorder.onerror = () => say('Ошибка записи. Попробуй короткий ролик.', 'error');
 
       recorder.onstop = () => {
-        stream.getTracks().forEach(track => track.stop());
-        const blob = new Blob(chunks, {type:mime});
-        if (resultURL) URL.revokeObjectURL(resultURL);
-        resultURL = URL.createObjectURL(blob);
+        stream.getTracks().forEach(t => t.stop());
+        if (outputUrl) URL.revokeObjectURL(outputUrl);
 
-        const extension = mime.includes('mp4') ? 'mp4' : 'webm';
-        const link = $('download');
-        link.href = resultURL;
-        link.download = 'frame-studio.' + extension;
-        link.textContent = 'Скачать ' + extension.toUpperCase();
-        link.hidden = false;
+        const blob = new Blob(chunks, {type:mime});
+        outputUrl = URL.createObjectURL(blob);
+        const ext = mime.includes('mp4') ? 'mp4' : 'webm';
+
+        $('download').href = outputUrl;
+        $('download').download = 'frame-studio.' + ext;
+        $('download').textContent = 'Скачать результат · ' + ext.toUpperCase();
+        $('download').hidden = false;
+        $('download').style.display = 'block';
 
         exporting = false;
         $('export').disabled = false;
-        $('play').textContent = 'Воспроизвести';
-        message('Экспорт завершён · ' + (blob.size / 1048576).toFixed(1) +
-          ' МБ. Скачай файл и проверь воспроизведение и звук.', 'ok');
+        say('Экспорт завершён. Размер файла: ' +
+          (blob.size / 1048576).toFixed(1) +
+          ' МБ. Проверь видео и наличие звука.', 'ok');
       };
 
       video.pause();
@@ -388,9 +406,11 @@ footer { text-align:center;color:#6f7279;font-size:10px;letter-spacing:.12em;mar
           resolve();
           return;
         }
-        const onSeeked = () => resolve();
-        video.addEventListener('seeked', onSeeked, {once:true});
-        setTimeout(() => reject(new Error('Тайм-аут подготовки видео')), 10000);
+        const timer = setTimeout(() => reject(new Error('Время ожидания истекло')), 10000);
+        video.addEventListener('seeked', () => {
+          clearTimeout(timer);
+          resolve();
+        }, {once:true});
       });
 
       recorder.start(1000);
@@ -402,7 +422,7 @@ footer { text-align:center;color:#6f7279;font-size:10px;letter-spacing:.12em;mar
           recorder.stop();
           return;
         }
-        raf = requestAnimationFrame(render);
+        frameId = requestAnimationFrame(render);
       };
 
       video.addEventListener('ended', () => {
@@ -410,29 +430,35 @@ footer { text-align:center;color:#6f7279;font-size:10px;letter-spacing:.12em;mar
       }, {once:true});
 
       await video.play();
-      message('Обрабатываем видео в реальном времени. Не закрывай вкладку.', 'ok');
-      raf = requestAnimationFrame(render);
+      say('Обрабатываем видео. Не закрывай Mini App.', 'ok');
+      frameId = requestAnimationFrame(render);
 
-    } catch (error) {
+    } catch (err) {
       exporting = false;
       $('export').disabled = false;
+      cancelAnimationFrame(frameId);
       if (recorder && recorder.state === 'recording') {
         try { recorder.stop(); } catch (_) {}
       }
-      message('Экспорт не запустился: ' + (error.message || 'ошибка Safari') +
-        '. Попробуй короткий MP4.', 'error');
+      say('Не удалось начать экспорт: ' + (err.message || 'ошибка Safari') +
+        '. Попробуй короткий MP4 и меньшее разрешение.', 'error');
     }
   });
 
-  window.addEventListener('beforeunload', () => {
-    cancelAnimationFrame(raf);
-    if (sourceURL) URL.revokeObjectURL(sourceURL);
-    if (resultURL) URL.revokeObjectURL(resultURL);
+  $('starsButton').addEventListener('click', () => {
+    $('paymentStatus').textContent =
+      'Оплата пока не подключена. Нужен серверный обработчик существующего Telegram-бота, который создаст счёт Stars и проверит успешный платёж.';
+    $('paymentStatus').className = 'status error';
   });
 
-  update();
+  window.addEventListener('beforeunload', () => {
+    cancelAnimationFrame(frameId);
+    if (sourceUrl) URL.revokeObjectURL(sourceUrl);
+    if (outputUrl) URL.revokeObjectURL(outputUrl);
+  });
+
+  updateControls();
 })();
 </script>
 </body>
 </html>
-
