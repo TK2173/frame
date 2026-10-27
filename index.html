@@ -1,0 +1,689 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090909">
+  <meta name="description" content="FRAME Studio — пространство для твоих видео">
+  <title>FRAME Studio</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090909;
+      --panel: #11100e;
+      --panel2: #181612;
+      --gold: #d7b878;
+      --gold-light: #f0dfb5;
+      --gold-border: #493c27;
+      --text: #f4f0e7;
+      --muted: #999184;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 50% -20%, rgba(160, 122, 49, .13), transparent 55%),
+        var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .app {
+      width: min(1040px, 100%);
+      margin: 0 auto;
+      padding: 26px 24px 48px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 22px;
+      border-bottom: 1px solid #29241b;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      border: 1px solid #80683c;
+      border-radius: 12px;
+      color: var(--gold);
+      font-size: 21px;
+      background: linear-gradient(145deg, #211c13, #0c0b09);
+    }
+
+    .brand-name {
+      font-size: 19px;
+      font-weight: 750;
+      letter-spacing: 3px;
+    }
+
+    .brand-sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 3px;
+    }
+
+    .privacy {
+      color: #b9a77f;
+      border: 1px solid #393020;
+      background: #12100c;
+      padding: 9px 12px;
+      border-radius: 30px;
+      font-size: 11px;
+    }
+
+    .hero {
+      padding: 44px 0 30px;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 16px 0 12px;
+      font-size: clamp(35px, 6vw, 59px);
+      line-height: 1.08;
+      letter-spacing: -2px;
+      font-weight: 650;
+    }
+
+    h1 span { color: var(--gold); }
+
+    .hero p {
+      max-width: 510px;
+      margin: 0;
+      color: #a49d90;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 22px;
+      border: 1px solid var(--gold-border);
+      border-radius: 17px;
+      background: linear-gradient(145deg, rgba(24, 22, 18, .96), rgba(13, 13, 12, .98));
+      box-shadow: 0 14px 40px rgba(0, 0, 0, .2);
+    }
+
+    .card-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 19px;
+      font-size: 13px;
+      font-weight: 650;
+      letter-spacing: 1px;
+    }
+
+    .step {
+      display: grid;
+      place-items: center;
+      width: 27px;
+      height: 27px;
+      flex-shrink: 0;
+      border: 1px solid #69552f;
+      border-radius: 8px;
+      color: var(--gold);
+      font-size: 11px;
+    }
+
+    .dropzone {
+      position: relative;
+      display: flex;
+      min-height: 255px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 22px;
+      overflow: hidden;
+      text-align: center;
+      border: 1px dashed #67532f;
+      border-radius: 13px;
+      background: radial-gradient(ellipse at center, #1b1811 0%, #0d0d0b 75%);
+      transition: border-color .2s, background .2s;
+    }
+
+    .dropzone:hover,
+    .dropzone.dragover {
+      border-color: var(--gold);
+      background: #19160f;
+    }
+
+    .upload-icon {
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      color: var(--gold);
+      border: 1px solid #514126;
+      border-radius: 16px;
+      background: #19150e;
+      font-size: 25px;
+    }
+
+    .drop-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .drop-hint {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .file-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      min-height: 45px;
+      padding: 0 18px;
+      border: 1px solid #d7b878;
+      border-radius: 10px;
+      color: #171208;
+      background: linear-gradient(135deg, #ead29b, #c3a05b);
+      font-size: 13px;
+      font-weight: 700;
+      transition: transform .18s, filter .18s;
+    }
+
+    .button:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+
+    .button:active { transform: scale(.98); }
+
+    .button.secondary {
+      color: var(--gold-light);
+      border-color: #514329;
+      background: #191710;
+    }
+
+    .button:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .preview {
+      display: none;
+      width: 100%;
+      margin-top: 14px;
+    }
+
+    .preview video {
+      display: block;
+      width: 100%;
+      max-height: 390px;
+      border: 1px solid #3f3524;
+      border-radius: 12px;
+      background: #000;
+    }
+
+    .file-info {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+      color: #c9bea7;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .remove {
+      flex-shrink: 0;
+      border: 0;
+      padding: 0;
+      color: #c7a96b;
+      background: none;
+      text-decoration: underline;
+    }
+
+    .section-label {
+      margin: 23px 0 12px;
+      color: #c5b28a;
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: 1.5px;
+    }
+
+    .quality-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .quality-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px;
+      border: 1px solid #302b21;
+      border-radius: 11px;
+      background: #11110f;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+    }
+
+    .quality-option:has(input:checked) {
+      border-color: #8d7340;
+      background: #1c1810;
+    }
+
+    .quality-option input {
+      accent-color: #d7b878;
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+
+    .quality-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .quality-desc {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .wide {
+      width: 100%;
+      margin-top: 19px;
+    }
+
+    .notice {
+      margin-top: 13px;
+      color: #928b7c;
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .status {
+      display: none;
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid #514329;
+      border-radius: 10px;
+      color: var(--gold-light);
+      background: #17140e;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .feature-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .feature {
+      padding: 16px;
+      border: 1px solid #29251d;
+      border-radius: 13px;
+      background: rgba(17, 16, 14, .75);
+    }
+
+    .feature-icon {
+      margin-bottom: 10px;
+      color: var(--gold);
+      font-size: 18px;
+    }
+
+    .feature-title {
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .feature-desc {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    footer {
+      margin-top: 30px;
+      padding-top: 19px;
+      border-top: 1px solid #29241b;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: #777165;
+      font-size: 11px;
+    }
+
+    @media (max-width: 720px) {
+      .app {
+        padding: 18px 15px calc(28px + env(safe-area-inset-bottom));
+      }
+
+      header { margin-bottom: 0; }
+      .privacy { font-size: 10px; padding: 8px; }
+      .hero { padding: 35px 0 25px; }
+      .workspace { grid-template-columns: 1fr; }
+      .card { padding: 17px; }
+      .dropzone { min-height: 215px; }
+      .feature-row { grid-template-columns: 1fr; }
+      .feature { display: flex; gap: 12px; align-items: center; }
+      .feature-icon { margin: 0; }
+      footer { flex-wrap: wrap; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <header>
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">F</div>
+        <div>
+          <div class="brand-name">FRAME</div>
+          <div class="brand-sub">STUDIO</div>
+        </div>
+      </div>
+      <div class="privacy">◇ Локальный режим</div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">Video enhancement studio</div>
+      <h1>Каждый кадр.<br><span>Совершеннее.</span></h1>
+      <p>
+        Твоё пространство для видео. Выбери ролик, посмотри предпросмотр
+        и настрой параметры перед обработкой.
+      </p>
+    </section>
+
+    <section class="workspace">
+      <div class="card">
+        <h2 class="card-heading">
+          <span class="step">01</span>
+          ВЫБЕРИ ВИДЕО
+        </h2>
+
+        <div class="dropzone" id="dropzone">
+          <div class="upload-icon" aria-hidden="true">↑</div>
+          <div class="drop-title">Загрузи своё видео</div>
+          <div class="drop-hint">
+            Нажми, чтобы выбрать файл<br>
+            MP4, MOV, WEBM и другие форматы браузера
+          </div>
+          <button class="button" id="chooseButton" type="button">
+            Выбрать видео
+          </button>
+          <input class="file-input" id="videoInput" type="file"
+                 accept="video/*">
+        </div>
+
+        <div class="preview" id="preview">
+          <video id="videoPlayer" controls playsinline></video>
+          <div class="file-info">
+            <span id="fileInfo"></span>
+            <button class="remove" id="removeButton" type="button">
+              Удалить
+            </button>
+          </div>
+        </div>
+
+        <div class="notice">
+          Видео открывается прямо в браузере. Этот интерфейс не отправляет
+          выбранный файл на сервер.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-heading">
+          <span class="step">02</span>
+          ПАРАМЕТРЫ
+        </h2>
+
+        <div class="section-label">РЕЖИМ КАЧЕСТВА</div>
+
+        <div class="quality-list">
+          <label class="quality-option">
+            <input type="radio" name="quality" value="standard" checked>
+            <div>
+              <div class="quality-name">Standard</div>
+              <div class="quality-desc">Стандартный режим</div>
+            </div>
+          </label>
+
+          <label class="quality-option">
+            <input type="radio" name="quality" value="sharp">
+            <div>
+              <div class="quality-name">Sharp</div>
+              <div class="quality-desc">Настройка под чёткую картинку</div>
+            </div>
+          </label>
+
+          <label class="quality-option">
+            <input type="radio" name="quality" value="max">
+            <div>
+              <div class="quality-name">Max</div>
+              <div class="quality-desc">Максимальный режим интерфейса</div>
+            </div>
+          </label>
+        </div>
+
+        <button class="button wide" id="processButton" type="button" disabled>
+          ✦ Подготовить видео
+        </button>
+
+        <div class="status" id="status" role="status" aria-live="polite"></div>
+
+        <div class="notice">
+          Выбор режима пока сохраняет только настройку интерфейса.
+          Настоящее улучшение разрешения и FPS ещё не подключено.
+        </div>
+      </div>
+    </section>
+
+    <section class="feature-row" aria-label="Возможности">
+      <div class="feature">
+        <div class="feature-icon">◇</div>
+        <div>
+          <div class="feature-title">Твой файл</div>
+          <div class="feature-desc">Предпросмотр выбранного видео в браузере.</div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">✧</div>
+        <div>
+          <div class="feature-title">Минимализм</div>
+          <div class="feature-desc">Чистый интерфейс без лишних элементов.</div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">⌁</div>
+        <div>
+          <div class="feature-title">Приватность</div>
+          <div class="feature-desc">Нет регистрации, паролей и загрузки видео на сервер.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>© FRAME Studio</span>
+      <span>Made for creators</span>
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const input = document.getElementById("videoInput");
+      const chooseButton = document.getElementById("chooseButton");
+      const dropzone = document.getElementById("dropzone");
+      const preview = document.getElementById("preview");
+      const player = document.getElementById("videoPlayer");
+      const fileInfo = document.getElementById("fileInfo");
+      const removeButton = document.getElementById("removeButton");
+      const processButton = document.getElementById("processButton");
+      const status = document.getElementById("status");
+
+      let currentUrl = null;
+      let currentFile = null;
+
+      function formatSize(bytes) {
+        if (bytes < 1024 * 1024) {
+          return (bytes / 1024).toFixed(0) + " KB";
+        }
+        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+      }
+
+      function showStatus(message) {
+        status.textContent = message;
+        status.style.display = "block";
+      }
+
+      function clearVideo() {
+        player.pause();
+        player.removeAttribute("src");
+        player.load();
+
+        if (currentUrl) {
+          URL.revokeObjectURL(currentUrl);
+          currentUrl = null;
+        }
+
+        currentFile = null;
+        input.value = "";
+        preview.style.display = "none";
+        dropzone.style.display = "flex";
+        processButton.disabled = true;
+        status.style.display = "none";
+        fileInfo.textContent = "";
+      }
+
+      function loadVideo(file) {
+        if (!file) return;
+
+        if (!file.type.startsWith("video/")) {
+          showStatus("Выбери видеофайл. Другие типы файлов не поддерживаются.");
+          return;
+        }
+
+        clearVideo();
+        currentFile = file;
+        currentUrl = URL.createObjectURL(file);
+
+        player.src = currentUrl;
+        fileInfo.textContent = file.name + " · " + formatSize(file.size);
+        preview.style.display = "block";
+        dropzone.style.display = "none";
+        processButton.disabled = false;
+        showStatus("Видео выбрано. Можешь просмотреть его и выбрать режим.");
+      }
+
+      chooseButton.addEventListener("click", () => input.click());
+
+      dropzone.addEventListener("click", event => {
+        if (event.target.closest("button")) return;
+        input.click();
+      });
+
+      input.addEventListener("change", () => {
+        loadVideo(input.files && input.files[0]);
+      });
+
+      removeButton.addEventListener("click", clearVideo);
+
+      ["dragenter", "dragover"].forEach(eventName => {
+        dropzone.addEventListener(eventName, event => {
+          event.preventDefault();
+          dropzone.classList.add("dragover");
+        });
+      });
+
+      ["dragleave", "drop"].forEach(eventName => {
+        dropzone.addEventListener(eventName, event => {
+          event.preventDefault();
+          dropzone.classList.remove("dragover");
+        });
+      });
+
+      dropzone.addEventListener("drop", event => {
+        const file = event.dataTransfer &&
+          event.dataTransfer.files &&
+          event.dataTransfer.files[0];
+        loadVideo(file);
+      });
+
+      processButton.addEventListener("click", () => {
+        if (!currentFile) return;
+
+        const selected = document.querySelector(
+          'input[name="quality"]:checked'
+        ).value;
+
+        const labels = {
+          standard: "Standard",
+          sharp: "Sharp",
+          max: "Max"
+        };
+
+        showStatus(
+          "Видео готово к следующему этапу. Выбран режим " +
+          labels[selected] +
+          ". Реальная обработка пока не подключена; файл не отправлялся."
+        );
+      });
+
+      window.addEventListener("beforeunload", () => {
+        if (currentUrl) URL.revokeObjectURL(currentUrl);
+      });
+    })();
+  </script>
+</body>
+</html>
